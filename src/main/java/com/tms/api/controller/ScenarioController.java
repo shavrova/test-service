@@ -35,9 +35,8 @@ public class ScenarioController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ScenarioResponse> createScenario(@Valid @RequestBody CreateScenarioRequest created,
-                                                           @RequestHeader("user-id") String userId) {
-        //TODO: override mapper to
+    public ResponseEntity<?> createScenario(@Valid @RequestBody CreateScenarioRequest created,
+                                            @RequestHeader("user-id") String userId) {
         ScenarioDto scenarioDto = service.createScenarioByUser(mapper.map(created, ScenarioDto.class), userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(scenarioDto, ScenarioResponse.class));
     }

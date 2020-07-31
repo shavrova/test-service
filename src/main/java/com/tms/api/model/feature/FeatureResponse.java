@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -17,9 +18,8 @@ public class FeatureResponse {
 
     private String featureId;
 
-    @NotBlank(message = "Feature name cannot be empty")
     private String featureName;
-
+    @Size(max = 500, message = "Feature description should be less then 500 characters")
     private String featureDescription;
 
     private String className;

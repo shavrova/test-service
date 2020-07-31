@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 public class TestServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TestServiceApplication .class, args);
+        SpringApplication.run(TestServiceApplication.class, args);
     }
 
     @Bean

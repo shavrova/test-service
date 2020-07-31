@@ -15,8 +15,8 @@ import java.util.List;
 @ToString
 public class CreateFeatureRequest {
 
-    @Size(min = 2, max = 50, message = "Scenario name must be between 2 and 50 characters")
-    @NotEmpty(message = "Scenario name cannot be empty")
+    @Size(min = 2, max = 50, message = "Feature name must be between 2 and 50 characters")
+    @NotEmpty(message = "Feature name cannot be empty")
     private String featureName;
 
     private String featureDescription;

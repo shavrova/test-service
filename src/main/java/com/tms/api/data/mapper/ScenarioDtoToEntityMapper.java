@@ -4,7 +4,7 @@ import com.tms.api.data.dto.ScenarioDto;
 import com.tms.api.data.entity.Feature;
 import com.tms.api.data.entity.Scenario;
 import com.tms.api.data.repository.FeatureRepository;
-import com.tms.api.exception.ItemNotFoundException;
+import com.tms.api.exception.ResourceNotFoundException;
 import org.modelmapper.Converter;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class ScenarioDtoToEntityMapper extends PropertyMap<ScenarioDto, Scenario
 
     private Converter<String, Feature> featureIdToEntity = context ->
             featureRepository.findByFeatureId(context.getSource())
-                    .orElseThrow(() -> new ItemNotFoundException("No feature with id " + context.getSource()));
+                    .orElseThrow(() -> new ResourceNotFoundException("No feature with id " + context.getSource()));
 
 
     @Override

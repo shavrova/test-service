@@ -41,7 +41,7 @@ public class Scenario extends BaseEntity implements Serializable {
     private String userId;
 
     @ManyToOne
-    @JoinColumn(name="feature_id", nullable = true)
+    @JoinColumn(name = "feature_id", nullable = true)
     private Feature feature;
 
     @ManyToMany

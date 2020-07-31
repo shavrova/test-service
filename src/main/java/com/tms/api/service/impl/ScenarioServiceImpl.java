@@ -6,7 +6,7 @@ import com.tms.api.data.mapper.ScenarioDtoToEntityMapper;
 import com.tms.api.data.mapper.ScenarioEntityToDtoMapper;
 import com.tms.api.data.repository.FeatureRepository;
 import com.tms.api.data.repository.ScenarioRepository;
-import com.tms.api.exception.ItemNotFoundException;
+import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.exception.NotUniqueEntryException;
 import com.tms.api.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +76,7 @@ public class ScenarioServiceImpl implements ScenarioService {
 
     @Override
     public ScenarioDto getById(String id) {
-        Scenario scenario = repository.findByScenarioId(id).orElseThrow(() -> new ItemNotFoundException("Can't find scenario with id " + id));
+        Scenario scenario = repository.findByScenarioId(id).orElseThrow(() -> new ResourceNotFoundException("Can't find scenario with id " + id));
         return mapper.map(scenario, ScenarioDto.class);
     }
 
@@ -90,7 +90,7 @@ public class ScenarioServiceImpl implements ScenarioService {
     public void deleteById(String id) {
         Scenario scenario = repository
                 .findByScenarioId(id)
-                .orElseThrow(() -> new ItemNotFoundException("Can't find scenario with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find scenario with id " + id));
         repository.delete(scenario);
     }
 

@@ -4,7 +4,7 @@ package com.tms.api.service.impl;
 import com.tms.api.data.dto.FeatureDto;
 import com.tms.api.data.entity.Feature;
 import com.tms.api.data.repository.FeatureRepository;
-import com.tms.api.exception.ItemNotFoundException;
+import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.exception.NotUniqueEntryException;
 import com.tms.api.service.FeatureService;
 import org.modelmapper.ModelMapper;
@@ -47,7 +47,7 @@ public class FeatureServiceImpl implements FeatureService {
 
     @Override
     public FeatureDto getById(String id) {
-        Feature feature = repository.findByFeatureId(id).orElseThrow(() -> new ItemNotFoundException("Can't find feature with id " + id));
+        Feature feature = repository.findByFeatureId(id).orElseThrow(() -> new ResourceNotFoundException("Can't find feature with id " + id));
         return mapper.map(feature, FeatureDto.class);
     }
 
@@ -61,7 +61,7 @@ public class FeatureServiceImpl implements FeatureService {
     public void deleteById(String id) {
         Feature feature = repository
                 .findByFeatureId(id)
-                .orElseThrow(() -> new ItemNotFoundException("Can't find feature with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find feature with id " + id));
         repository.delete(feature);
     }
 }

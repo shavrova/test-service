@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -16,10 +17,10 @@ import java.util.List;
 public class CreateScenarioRequest {
 
     @Size(min = 2, max = 50, message = "Scenario name must be between 2 and 50 characters")
-    @NotBlank(message = "Scenario name cannot be empty")
+    @NotNull(message = "Scenario name is required")
     private String scenarioName;
 
-    @Size(max = 100, message = "Scenario description should be less then 1000 characters")
+    @Size(max = 500, message = "Scenario description should be less then 500 characters")
     private String scenarioDescription;
 
     private String featureId;
