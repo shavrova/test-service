@@ -21,9 +21,7 @@ public class ScenarioDtoToEntityMapper extends PropertyMap<ScenarioDto, Scenario
 
     private Converter<String, Feature> featureIdToEntity = context ->
             featureRepository.findByFeatureId(context.getSource())
-                    .orElseThrow(() -> new ResourceNotFoundException("No feature with id " + context.getSource()));
-
-
+                    .orElseThrow(() -> new ResourceNotFoundException("Feature id is not valid"));
     @Override
     protected void configure() {
         using(featureIdToEntity).map(source.getFeatureId()).setFeature(null);

@@ -5,7 +5,7 @@ import com.tms.api.data.dto.FeatureDto;
 import com.tms.api.data.entity.Feature;
 import com.tms.api.data.repository.FeatureRepository;
 import com.tms.api.exception.ResourceNotFoundException;
-import com.tms.api.exception.NotUniqueEntryException;
+import com.tms.api.exception.AlreadyExistsException;
 import com.tms.api.service.FeatureService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +36,20 @@ public class FeatureServiceImpl implements FeatureService {
             created.setScenarios(Collections.emptyList());
             return created;
         }
-        throw new NotUniqueEntryException(String.format("Feature name \'%s\' already exists. Please use another name.", dto.getFeatureName()));
+        throw new AlreadyExistsException("Feature name already exists. Please use another name.");
     }
 
+
+    //TODO
     @Override
     public FeatureDto update(FeatureDto dto) {
-        //Feature feature = repository.findByFeatureId(dto.getFeatureId()).orElseThrow(() ->new ItemNotFoundException("Feature with this id doesn't exist"));
+        //Feature feature = repository.findByFeatureId(dto.getFeatureId()).orElseThrow(() ->new  ResourceNotFoundException("Feature id doesn't exists."));
         return null;
     }
 
     @Override
     public FeatureDto getById(String id) {
-        Feature feature = repository.findByFeatureId(id).orElseThrow(() -> new ResourceNotFoundException("Can't find feature with id " + id));
+        Feature feature = repository.findByFeatureId(id).orElseThrow(() -> new ResourceNotFoundException("Feature id doesn't exists."));
         return mapper.map(feature, FeatureDto.class);
     }
 
@@ -61,7 +63,7 @@ public class FeatureServiceImpl implements FeatureService {
     public void deleteById(String id) {
         Feature feature = repository
                 .findByFeatureId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find feature with id " + id));
+                .orElseThrow(() -> new  ResourceNotFoundException("Feature id doesn't exists."));
         repository.delete(feature);
     }
 }

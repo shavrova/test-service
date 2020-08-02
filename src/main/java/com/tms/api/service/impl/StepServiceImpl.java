@@ -3,7 +3,7 @@ package com.tms.api.service.impl;
 import com.tms.api.data.dto.StepDto;
 import com.tms.api.data.entity.Step;
 import com.tms.api.data.repository.StepRepository;
-import com.tms.api.exception.NotUniqueEntryException;
+import com.tms.api.exception.AlreadyExistsException;
 import com.tms.api.service.StepService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -38,7 +38,7 @@ public class StepServiceImpl implements StepService {
             repository.save(step);
             return mapper.map(step, StepDto.class);
         }
-        throw new NotUniqueEntryException(String.format("Step name \'%s\' already exists. Please use another name.", dto.getStepName()));
+        throw new AlreadyExistsException("Step name already exists. Please use another name.");
     }
 
     @Override

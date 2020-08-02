@@ -12,14 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
-
-    //Will return default response in nome than 1 errors for single field.
-
+public class RequestValidationExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -27,6 +23,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         Map<String, String> errorsMap = fieldErrors.stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
 
-        return new ResponseEntity(errorsMap.isEmpty()? ex:errorsMap, headers, status);
+        return new ResponseEntity(errorsMap.isEmpty() ? ex : errorsMap, headers, status);
     }
 }

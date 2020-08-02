@@ -6,8 +6,8 @@ import com.tms.api.data.mapper.ScenarioDtoToEntityMapper;
 import com.tms.api.data.mapper.ScenarioEntityToDtoMapper;
 import com.tms.api.data.repository.FeatureRepository;
 import com.tms.api.data.repository.ScenarioRepository;
+import com.tms.api.exception.AlreadyExistsException;
 import com.tms.api.exception.ResourceNotFoundException;
-import com.tms.api.exception.NotUniqueEntryException;
 import com.tms.api.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -51,7 +51,7 @@ public class ScenarioServiceImpl implements ScenarioService {
             repository.save(scenario);
             return mapper.map(scenario, ScenarioDto.class);
         }
-        throw new NotUniqueEntryException(String.format("Scenario name \'%s\' already exists. Please use another name.", dto.getScenarioName()));
+        throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
 
     }
 
@@ -62,11 +62,9 @@ public class ScenarioServiceImpl implements ScenarioService {
             dto.setScenarioId(UUID.randomUUID().toString().replace("-", ""));
             Scenario scenario = mapper.map(dto, Scenario.class);
             repository.save(scenario);
-            System.out.println("inside createScenarioByUser");
-            System.out.println("Scenario object id " + scenario.getFeature().getFeatureId());
             return mapper.map(scenario, ScenarioDto.class);
         }
-        throw new NotUniqueEntryException(String.format("Scenario name \'%s\' already exists. Please use another name.", dto.getScenarioName()));
+        throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
     }
 
     @Override
