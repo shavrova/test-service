@@ -4,6 +4,7 @@ import com.tms.api.data.dto.StepDto;
 import com.tms.api.data.entity.Step;
 import com.tms.api.data.repository.StepRepository;
 import com.tms.api.exception.AlreadyExistsException;
+import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.service.StepService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -48,12 +49,14 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public StepDto getById(String id) {
-        return null;
+        Step step = repository.findByStepId(id).orElseThrow(() -> new ResourceNotFoundException("Step id doesn't exists."));
+        return mapper.map(step, StepDto.class);
     }
 
     @Override
     public Page<StepDto> findPage(Pageable page) {
-        return null;
+        Page<Step> steps = repository.findAll(page);
+        return steps.map(f -> mapper.map(f, StepDto.class));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.tms.api.controller;
 import com.tms.api.data.dto.ScenarioDto;
 import com.tms.api.model.scenario.CreateScenarioRequest;
 import com.tms.api.model.scenario.ScenarioResponse;
+import com.tms.api.model.scenario.UpdateScenarioRequest;
 import com.tms.api.service.FeatureService;
 import com.tms.api.service.ScenarioService;
 import org.modelmapper.ModelMapper;
@@ -63,6 +64,12 @@ public class ScenarioController {
     public ResponseEntity<Void> deleteFeature(@PathVariable("id") String id) {
         service.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping
+    public ResponseEntity<ScenarioResponse> updateScenario(@Valid @RequestBody UpdateScenarioRequest updated) {
+        ScenarioDto dto = service.update(mapper.map(updated, ScenarioDto.class));
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(dto, ScenarioResponse.class));
     }
 
 }

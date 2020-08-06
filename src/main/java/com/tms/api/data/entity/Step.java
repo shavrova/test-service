@@ -1,7 +1,6 @@
 package com.tms.api.data.entity;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +20,7 @@ import java.util.List;
 public class Step extends BaseEntity implements Serializable {
 
     @NotNull
-    @Column(unique = true)
+    @Column(unique = true, updatable = false)
     private String stepId;
 
     @NotBlank

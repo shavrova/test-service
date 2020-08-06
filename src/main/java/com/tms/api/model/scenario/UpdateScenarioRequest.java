@@ -23,4 +23,9 @@ public class UpdateScenarioRequest {
     @Size(max = 100, message = "Scenario description should be less then 1000 characters")
     private String scenarioDescription;
 
+    private String featureId;
+
+    //TODO
+    //private List<StepR> steps;
+
 }

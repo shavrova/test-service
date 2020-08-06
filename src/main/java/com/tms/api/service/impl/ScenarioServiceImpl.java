@@ -1,6 +1,7 @@
 package com.tms.api.service.impl;
 
 import com.tms.api.data.dto.ScenarioDto;
+import com.tms.api.data.entity.Feature;
 import com.tms.api.data.entity.Scenario;
 import com.tms.api.data.mapper.ScenarioDtoToEntityMapper;
 import com.tms.api.data.mapper.ScenarioEntityToDtoMapper;
@@ -69,12 +70,24 @@ public class ScenarioServiceImpl implements ScenarioService {
 
     @Override
     public ScenarioDto update(ScenarioDto dto) {
-        return null;
+        Scenario scenario = repository.findByScenarioId(dto.getScenarioId()).orElseThrow(() -> new ResourceNotFoundException("Scenario id doesn't exists."));
+        if (repository.findByScenarioName(dto.getScenarioName()).isEmpty()) {//name doesn't exists
+            scenario.setScenarioName(dto.getScenarioName());//set name
+        } else {
+            if (!dto.getScenarioName().equals(scenario.getScenarioName())) {
+                throw new AlreadyExistsException("Name already exists.");
+            }
+        }
+        scenario.setScenarioDescription(dto.getScenarioDescription());
+        Feature feature = featureRepository.findByFeatureId(dto.getFeatureId()).orElseThrow(() -> new ResourceNotFoundException("Feature id doesn't exists."));
+        scenario.setFeature(feature);
+        repository.save(scenario);
+        return mapper.map(scenario, ScenarioDto.class);
     }
 
     @Override
     public ScenarioDto getById(String id) {
-        Scenario scenario = repository.findByScenarioId(id).orElseThrow(() -> new ResourceNotFoundException("Can't find scenario with id " + id));
+        Scenario scenario = repository.findByScenarioId(id).orElseThrow(() -> new ResourceNotFoundException("Scenario id doesn't exists."));
         return mapper.map(scenario, ScenarioDto.class);
     }
 
@@ -88,7 +101,7 @@ public class ScenarioServiceImpl implements ScenarioService {
     public void deleteById(String id) {
         Scenario scenario = repository
                 .findByScenarioId(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find scenario with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Scenario id doesn't exists."));
         repository.delete(scenario);
     }
 

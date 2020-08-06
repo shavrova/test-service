@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "features", uniqueConstraints = @UniqueConstraint(columnNames = "feature_name"))
 public class Feature extends BaseEntity implements Serializable {
 
-    @Column(nullable = false, unique = true, name = "feature_id")
+    @Column(nullable = false, updatable = false, unique = true, name = "feature_id")
     private String featureId;
 
     @Column(nullable = false, length = 100, name = "feature_name")

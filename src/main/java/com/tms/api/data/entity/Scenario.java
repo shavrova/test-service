@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "scenarios", uniqueConstraints = @UniqueConstraint(columnNames = "scenario_name"))
 public class Scenario extends BaseEntity implements Serializable {
 
-    @Column(nullable = false, unique = true, name = "scenario_id")
+    @Column(nullable = false, unique = true, updatable = false, name = "scenario_id")
     private String scenarioId;
 
     @Column(nullable = false, length = 100, name = "scenario_name")
