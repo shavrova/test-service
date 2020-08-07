@@ -75,7 +75,7 @@ public class ScenarioServiceImpl implements ScenarioService {
             scenario.setScenarioName(dto.getScenarioName());//set name
         } else {
             if (!dto.getScenarioName().equals(scenario.getScenarioName())) {
-                throw new AlreadyExistsException("Name already exists.");
+                throw new AlreadyExistsException("Scenario name already exists.");
             }
         }
         scenario.setScenarioDescription(dto.getScenarioDescription());

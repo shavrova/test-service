@@ -17,10 +17,10 @@ public class UpdateScenarioRequest {
     private String scenarioId;
 
     @Size(min = 2, max = 50, message = "Scenario name must be between 2 and 50 characters")
-    @NotEmpty(message = "Scenario name cannot be empty")
+    @NotNull(message = "Scenario name is required")
     private String scenarioName;
 
-    @Size(max = 100, message = "Scenario description should be less then 1000 characters")
+    @Size(max = 500, message = "Scenario description should be less then 500 characters")
     private String scenarioDescription;
 
     private String featureId;
