@@ -10,7 +10,10 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
-public class CreateStepRequest {
+public class UpdateStepRequest {
+
+    @NotNull
+    private String stepId;
 
     @Size(min = 2, max = 100, message = "Step name must be between 2 and 100 characters")
     @NotNull(message = "Step name is required")

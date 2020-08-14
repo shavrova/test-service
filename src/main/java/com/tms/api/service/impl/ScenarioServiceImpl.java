@@ -1,16 +1,20 @@
 package com.tms.api.service.impl;
 
 import com.tms.api.data.dto.ScenarioDto;
+import com.tms.api.data.dto.StepDto;
 import com.tms.api.data.entity.Feature;
 import com.tms.api.data.entity.Scenario;
+import com.tms.api.data.entity.Step;
 import com.tms.api.data.mapper.ScenarioDtoToEntityMapper;
 import com.tms.api.data.mapper.ScenarioEntityToDtoMapper;
 import com.tms.api.data.repository.FeatureRepository;
 import com.tms.api.data.repository.ScenarioRepository;
+import com.tms.api.data.repository.StepRepository;
 import com.tms.api.exception.AlreadyExistsException;
 import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.service.ScenarioService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.NotImplementedException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,6 +42,9 @@ public class ScenarioServiceImpl implements ScenarioService {
     @Autowired
     private FeatureRepository featureRepository;
 
+    @Autowired
+    private StepRepository stepRepository;
+
     @PostConstruct
     public void init() {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -45,42 +53,40 @@ public class ScenarioServiceImpl implements ScenarioService {
     }
 
     @Override
-    public ScenarioDto create(ScenarioDto dto) {
-        if (repository.findByScenarioName(dto.getScenarioName()).isEmpty()) {
-            dto.setScenarioId(UUID.randomUUID().toString().replace("-", ""));
-            Scenario scenario = mapper.map(dto, Scenario.class);
-            repository.save(scenario);
-            return mapper.map(scenario, ScenarioDto.class);
-        }
-        throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
-
+    public ScenarioDto createScenarioByUser(ScenarioDto dto, String userId) {
+        dto.setUserId(userId);//set user id
+        if (repository.findByScenarioName(dto.getScenarioName()).isPresent()) //throw exception if scenario name exists
+            throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
+        //TODO: move id from here
+        dto.setScenarioId(UUID.randomUUID().toString().replace("-", ""));//set scenario id
+        Scenario scenario = mapper.map(dto, Scenario.class);//map dto to entity
+        scenario.setSteps(mapSteps(dto.getSteps()));//set found step objects to scenario entity
+        repository.save(scenario); //save scenario object
+        return mapper.map(scenario, ScenarioDto.class);//map entity back to dto
     }
 
     @Override
-    public ScenarioDto createScenarioByUser(ScenarioDto dto, String userId) {
-        dto.setUserId(userId);
-        if (repository.findByScenarioName(dto.getScenarioName()).isEmpty()) {
-            dto.setScenarioId(UUID.randomUUID().toString().replace("-", ""));
-            Scenario scenario = mapper.map(dto, Scenario.class);
-            repository.save(scenario);
-            return mapper.map(scenario, ScenarioDto.class);
-        }
-        throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
+    public ScenarioDto create(ScenarioDto dto) {
+        throw new NotImplementedException("Scenario can only be created with user id. Use createScenarioByUser method");
     }
 
     @Override
     public ScenarioDto update(ScenarioDto dto) {
-        Scenario scenario = repository.findByScenarioId(dto.getScenarioId()).orElseThrow(() -> new ResourceNotFoundException("Scenario id doesn't exists."));
-        if (repository.findByScenarioName(dto.getScenarioName()).isEmpty()) {//name doesn't exists
-            scenario.setScenarioName(dto.getScenarioName());//set name
-        } else {
-            if (!dto.getScenarioName().equals(scenario.getScenarioName())) {
-                throw new AlreadyExistsException("Scenario name already exists.");
-            }
+        //Find scenario by id and throw exception id doesn't exists
+        Scenario scenario = repository.findByScenarioId(dto.getScenarioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Scenario id doesn't exists."));
+        if (!dto.getScenarioName().equals(scenario.getScenarioName()))//check if new name doesn't equal current, otherwise do nothing
+            if (repository.findByScenarioName(dto.getScenarioName()).isPresent()) //Find scenario by name and trow exception if name already exist
+                throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
+        scenario.setScenarioName(dto.getScenarioName());//update scenario name
+        scenario.setScenarioDescription(dto.getScenarioDescription());//update description
+        if (!dto.getFeatureId().equals(scenario.getFeature().getFeatureId())) {//check if new feature id doesn't equal current
+            //Found feature by id
+            Feature feature = featureRepository.findByFeatureId(dto.getFeatureId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Feature id doesn't exists."));
+            scenario.setFeature(feature);//update feature
         }
-        scenario.setScenarioDescription(dto.getScenarioDescription());
-        Feature feature = featureRepository.findByFeatureId(dto.getFeatureId()).orElseThrow(() -> new ResourceNotFoundException("Feature id doesn't exists."));
-        scenario.setFeature(feature);
+        scenario.setSteps(mapSteps(dto.getSteps()));
         repository.save(scenario);
         return mapper.map(scenario, ScenarioDto.class);
     }
@@ -110,6 +116,15 @@ public class ScenarioServiceImpl implements ScenarioService {
         return repository.findByUserId(userId)
                 .stream()
                 .map(scenario -> mapper.map(scenario, ScenarioDto.class))
+                .collect(Collectors.toList());
+    }
+
+
+    private List<Step> mapSteps(List<StepDto> stepsDto) {
+        if (stepsDto == null || stepsDto.isEmpty()) return new ArrayList<>();
+        return stepsDto.stream()
+                .map(s -> stepRepository.findByStepId(s.getStepId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Step id doesn't exists.")))
                 .collect(Collectors.toList());
     }
 

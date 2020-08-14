@@ -1,10 +1,12 @@
 package com.tms.api.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-//@ToString
+
 @Entity
 @Table(name = "scenarios", uniqueConstraints = @UniqueConstraint(columnNames = "scenario_name"))
 public class Scenario extends BaseEntity implements Serializable {
@@ -40,15 +42,16 @@ public class Scenario extends BaseEntity implements Serializable {
     @Column(name = "user_id")
     private String userId;
 
-    @ManyToOne
-    @JoinColumn(name = "feature_id", nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "feature_id")
     private Feature feature;
 
-    @ManyToMany
+
     @JoinTable(
             name = "scenario_step",
-            joinColumns = @JoinColumn(name = "scenario_id"),
-            inverseJoinColumns = @JoinColumn(name = "step_id"))
-    private List<Step> steps = new LinkedList<>();
+            joinColumns = {@JoinColumn(name = "scenario_id")},
+            inverseJoinColumns = {@JoinColumn(name = "step_id")})
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Step> steps = new ArrayList<>();
 
 }

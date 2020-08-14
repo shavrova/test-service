@@ -12,6 +12,7 @@ public class ScenarioEntityToDtoMapper extends PropertyMap<Scenario, ScenarioDto
 
     private Converter<Feature, String> getFeatureId = context -> context.getSource().getFeatureId();
 
+
     @Override
     protected void configure() {
         using(getFeatureId).map(source.getFeature()).setFeatureId(null);

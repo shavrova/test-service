@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +32,17 @@ public class ScenarioController {
     @Autowired
     private FeatureService featureService;
 
-    @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createScenario(@Valid @RequestBody CreateScenarioRequest created,
-                                            @RequestHeader("user-id") String userId) {
-        ScenarioDto scenarioDto = service.createScenarioByUser(mapper.map(created, ScenarioDto.class), userId);
+    @PostMapping
+    public ResponseEntity<?> createScenario(@Valid @RequestBody CreateScenarioRequest created
+            /*@RequestHeader("user-id") String userId*/) {
+        ScenarioDto scenarioDto = service.createScenarioByUser(mapper.map(created, ScenarioDto.class), "userId948594305");
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(scenarioDto, ScenarioResponse.class));
+    }
+
+    @PutMapping
+    public ResponseEntity<ScenarioResponse> updateScenario(@Valid @RequestBody UpdateScenarioRequest updated) {
+        ScenarioDto dto = service.update(mapper.map(updated, ScenarioDto.class));
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(dto, ScenarioResponse.class));
     }
 
     @GetMapping("/{id}")
@@ -66,10 +69,5 @@ public class ScenarioController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping
-    public ResponseEntity<ScenarioResponse> updateScenario(@Valid @RequestBody UpdateScenarioRequest updated) {
-        ScenarioDto dto = service.update(mapper.map(updated, ScenarioDto.class));
-        return ResponseEntity.status(HttpStatus.OK).body(mapper.map(dto, ScenarioResponse.class));
-    }
 
 }

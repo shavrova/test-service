@@ -30,6 +30,6 @@ public class Feature extends BaseEntity implements Serializable {
     @Column(name = "class_name")
     private String className;
 
-    @OneToMany(mappedBy="feature")
+    @OneToMany(mappedBy="feature", cascade = CascadeType.ALL)
     private List<Scenario> scenarios = new ArrayList<>();
 }

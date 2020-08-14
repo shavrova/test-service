@@ -84,6 +84,6 @@ nb-configuration.xml
 .DS_Store
 
 ##############################
-## test-service
+## test-com.tms.api.service
 ##############################
 .gz

@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class StepController {
     }
 
     @GetMapping
-    ResponseEntity<Page<StepResponse>> getSteps(Pageable page) {
+    ResponseEntity<Page<StepResponse>> getSteps(@PageableDefault(size = 40) Pageable page) {
         Page<StepDto> dtos = service.findPage(page);
         return ResponseEntity.ok(dtos.map(dto -> mapper.map(dto, StepResponse.class)));
     }
@@ -42,5 +43,11 @@ public class StepController {
     @GetMapping("/{id}")
     public ResponseEntity<StepResponse> getStep(@PathVariable("id") String id) {
         return ResponseEntity.ok(mapper.map(service.getById(id), StepResponse.class));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStep(@PathVariable("id") String id) {
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

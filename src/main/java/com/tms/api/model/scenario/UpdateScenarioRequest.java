@@ -1,12 +1,13 @@
 package com.tms.api.model.scenario;
 
+import com.tms.api.model.step.UpdateStepRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class UpdateScenarioRequest {
     @NotNull
     private String scenarioId;
 
-    @Size(min = 2, max = 50, message = "Scenario name must be between 2 and 50 characters")
+    @Size(min = 2, max = 100, message = "Scenario name must be between 2 and 100 characters")
     @NotNull(message = "Scenario name is required")
     private String scenarioName;
 
@@ -25,7 +26,6 @@ public class UpdateScenarioRequest {
 
     private String featureId;
 
-    //TODO
-    //private List<StepR> steps;
+    private List<UpdateStepRequest> steps;
 
 }

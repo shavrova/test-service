@@ -61,6 +61,9 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public void deleteById(String id) {
-
+        Step step = repository
+                .findByStepId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Step id doesn't exists."));
+        repository.delete(step);
     }
 }

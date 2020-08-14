@@ -3,9 +3,10 @@ package com.tms.api.service.impl;
 
 import com.tms.api.data.dto.FeatureDto;
 import com.tms.api.data.entity.Feature;
+import com.tms.api.data.entity.Scenario;
 import com.tms.api.data.repository.FeatureRepository;
-import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.exception.AlreadyExistsException;
+import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.service.FeatureService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class FeatureServiceImpl implements FeatureService {
@@ -43,8 +46,25 @@ public class FeatureServiceImpl implements FeatureService {
     //TODO
     @Override
     public FeatureDto update(FeatureDto dto) {
-        //Feature feature = repository.findByFeatureId(dto.getFeatureId()).orElseThrow(() ->new  ResourceNotFoundException("Feature id doesn't exists."));
-        return null;
+        System.out.println("feature dto object inside upade com.tms.api.service");
+        System.out.println(dto);
+        Feature feature = repository.findByFeatureId(dto.getFeatureId()).orElseThrow(() -> new ResourceNotFoundException("Feature id doesn't exists."));
+        if (repository.findByFeatureName(dto.getFeatureName()).isEmpty()) {//name doesn't exists
+            feature.setFeatureName(dto.getFeatureName());//set name
+        } else {
+            if (!dto.getFeatureName().equals(feature.getFeatureName())) {
+                throw new AlreadyExistsException("Feature name already exists.");
+            }
+        }
+        feature.setFeatureName(dto.getFeatureName());
+        feature.setFeatureDescription(dto.getFeatureDescription());
+        feature.setClassName(dto.getClassName());
+        if (dto.getScenarios() != null) {
+            List<Scenario> scenarios = dto.getScenarios().stream().map(s -> mapper.map(s, Scenario.class)).collect(Collectors.toList());
+            feature.setScenarios(scenarios);
+        }
+        repository.save(feature);
+        return mapper.map(feature, FeatureDto.class);
     }
 
     @Override
@@ -63,7 +83,7 @@ public class FeatureServiceImpl implements FeatureService {
     public void deleteById(String id) {
         Feature feature = repository
                 .findByFeatureId(id)
-                .orElseThrow(() -> new  ResourceNotFoundException("Feature id doesn't exists."));
+                .orElseThrow(() -> new ResourceNotFoundException("Feature id doesn't exists."));
         repository.delete(feature);
     }
 }

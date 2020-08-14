@@ -19,7 +19,6 @@ public class RequestValidationExceptionHandler extends ResponseEntityExceptionHa
     @Override
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        System.out.println("inside handleMethodArgumentNotValid");
         final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         Map<String, String> errorsMap = fieldErrors.stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
 

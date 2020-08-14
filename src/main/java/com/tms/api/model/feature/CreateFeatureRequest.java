@@ -1,12 +1,11 @@
 package com.tms.api.model.feature;
 
-import com.tms.api.data.entity.Scenario;
 import com.tms.api.model.scenario.CreateScenarioRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -15,8 +14,8 @@ import java.util.List;
 @ToString
 public class CreateFeatureRequest {
 
-    @Size(min = 2, max = 50, message = "Feature name must be between 2 and 50 characters")
-    @NotEmpty(message = "Feature name cannot be empty")
+    @Size(min = 2, max = 100, message = "Feature name must be between 2 and 100 characters")
+    @NotNull(message = "Feature name is required")
     private String featureName;
 
     private String featureDescription;
