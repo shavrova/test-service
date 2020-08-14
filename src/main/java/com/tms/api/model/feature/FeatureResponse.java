@@ -1,14 +1,13 @@
 package com.tms.api.model.feature;
 
 import com.tms.api.model.scenario.ScenarioResponse;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Size;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Getter
 @Setter
