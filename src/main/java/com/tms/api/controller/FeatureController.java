@@ -53,6 +53,11 @@ public class FeatureController {
         return ResponseEntity.ok(dtos.map(dto -> mapper.map(dto, FeatureResponse.class)));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFeature(@PathVariable("id") String id) {
+        service.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 
     //TODO: add POST to update all features in single request (e.g update/add/remove all data)  /updateAll ?

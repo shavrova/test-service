@@ -1,13 +1,11 @@
 package com.tms.api.model.feature;
 
-import com.tms.api.model.scenario.CreateScenarioRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +19,6 @@ public class CreateFeatureRequest {
     private String featureDescription;
 
     private String className;
-
-    private List<CreateScenarioRequest> scenarios;
+    //Impossible to create feature with scenarios
+    //private List<UpdateScenarioRequest> scenarios;
 }

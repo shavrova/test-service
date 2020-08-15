@@ -6,6 +6,7 @@ import com.tms.api.data.repository.StepRepository;
 import com.tms.api.exception.AlreadyExistsException;
 import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.service.StepService;
+import com.tms.api.util.IdUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.UUID;
 
 @Service
 public class StepServiceImpl implements StepService {
@@ -34,7 +34,7 @@ public class StepServiceImpl implements StepService {
     @Override
     public StepDto create(StepDto dto) {
         if (repository.findByStepName(dto.getStepName()).isEmpty()) {
-            dto.setStepId(UUID.randomUUID().toString().replace("-", ""));
+            dto.setStepId(IdUtil.uuid());
             Step step = mapper.map(dto, Step.class);
             repository.save(step);
             return mapper.map(step, StepDto.class);
