@@ -30,8 +30,6 @@ public class Feature extends BaseEntity implements Serializable {
     @Column(name = "class_name")
     private String className;
 
-
-    @OneToMany(mappedBy = "feature")
-           // cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "feature", orphanRemoval = true)
     private List<Scenario> scenarios = new ArrayList<>();
 }

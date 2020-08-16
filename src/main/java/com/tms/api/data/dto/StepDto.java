@@ -18,6 +18,4 @@ public class StepDto implements Serializable {
 
     private String methodName;
 
-    //TODO
-    // private List<ScenarioDto> scenarios;
 }

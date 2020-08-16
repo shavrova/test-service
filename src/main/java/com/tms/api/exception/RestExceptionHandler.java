@@ -19,6 +19,12 @@ public class RestExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT, ex);
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException(NotAllowedException ex) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT, ex);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 }
 
 

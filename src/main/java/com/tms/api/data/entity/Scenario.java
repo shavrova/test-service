@@ -1,14 +1,14 @@
 package com.tms.api.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 @Builder
@@ -42,8 +42,9 @@ public class Scenario extends BaseEntity implements Serializable {
     @Column(name = "user_id")
     private String userId;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "feature_id")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Feature feature;
 
 
@@ -51,7 +52,8 @@ public class Scenario extends BaseEntity implements Serializable {
             name = "scenario_step",
             joinColumns = {@JoinColumn(name = "scenario_id")},
             inverseJoinColumns = {@JoinColumn(name = "step_id")})
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Step> steps = new ArrayList<>();
 
 }

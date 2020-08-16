@@ -2,12 +2,13 @@ package com.tms.api.data.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -29,9 +30,5 @@ public class Step extends BaseEntity implements Serializable {
     private String comment;
 
     private String methodName;
-
-    @ManyToMany(mappedBy = "steps")
-    private List<Scenario> scenarios = new ArrayList<>();
-
 
 }
