@@ -49,7 +49,16 @@ public class StepServiceImpl implements StepService {
 
     @Override
     public StepDto update(StepDto dto) {
-        return null;
+        Step step = repository.findByStepId(dto.getStepId())
+                .orElseThrow(() -> new ResourceNotFoundException("Step id doesn't exist."));
+        if (!dto.getStepName().equals(step.getStepName()))
+            if (repository.findByStepName(dto.getStepName()).isPresent())
+                throw new AlreadyExistsException("Step name already exist.");
+        step.setStepName(dto.getStepName());
+        step.setComment(dto.getComment());
+        step.setMethodName(dto.getMethodName());
+        repository.save(step);
+        return mapper.map(step, StepDto.class);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.tms.api.model.feature;
 
-import com.tms.api.data.dto.ScenarioDto;
 import com.tms.api.model.scenario.UpdateScenarioRequest;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -14,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateFeatureRequest {
 
     @NotNull

@@ -6,6 +6,7 @@ import com.tms.api.model.scenario.ScenarioResponse;
 import com.tms.api.model.scenario.UpdateScenarioRequest;
 import com.tms.api.service.FeatureService;
 import com.tms.api.service.ScenarioService;
+import com.tms.api.util.Path;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/features/scenarios")
+@RequestMapping(Path.SCENARIOS)
 @CrossOrigin
 public class ScenarioController {
 

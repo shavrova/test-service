@@ -1,13 +1,13 @@
 package com.tms.api.data.dto;
 
-import com.tms.api.data.entity.Scenario;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString

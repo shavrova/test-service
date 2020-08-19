@@ -15,10 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import com.tms.api.util.Path;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/features")
+@RequestMapping(Path.FEATURES)
 public class FeatureController {
 
     @Autowired

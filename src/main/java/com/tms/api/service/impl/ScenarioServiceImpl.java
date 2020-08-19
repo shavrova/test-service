@@ -55,7 +55,6 @@ public class ScenarioServiceImpl implements ScenarioService {
             throw new AlreadyExistsException("Scenario name already exists. Please use another name.");
         dto.setScenarioId(IdUtil.uuid());//set scenario id
         Scenario scenario = mapper.map(dto, Scenario.class);//map dto to entity
-        // scenario.getSteps().forEach(s -> s.getScenarioIds().add(scenario.getScenarioId())); //set scenario id to step
         repository.save(scenario); //save scenario object
         return mapper.map(scenario, ScenarioDto.class);//map entity back to dto
     }

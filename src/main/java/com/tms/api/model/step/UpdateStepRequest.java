@@ -1,8 +1,6 @@
 package com.tms.api.model.step;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,6 +8,9 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateStepRequest {
 
     @NotNull

@@ -3,20 +3,23 @@ package com.tms.api.service.impl;
 
 import com.tms.api.data.dto.FeatureDto;
 import com.tms.api.data.entity.Feature;
-import com.tms.api.data.mapper.FeatureDtoToEntityMapper;
 import com.tms.api.data.repository.FeatureRepository;
 import com.tms.api.exception.AlreadyExistsException;
 import com.tms.api.exception.ResourceNotFoundException;
 import com.tms.api.service.FeatureService;
 import com.tms.api.util.IdUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
+@Slf4j
 @Service
 public class FeatureServiceImpl implements FeatureService {
 
@@ -26,22 +29,24 @@ public class FeatureServiceImpl implements FeatureService {
     @Autowired
     private ModelMapper mapper;
 
-    @Autowired
-    private FeatureDtoToEntityMapper featureDtoToEntityMapper;
+    @PostConstruct
+    public void init() {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+    }
 
     @Override
     public FeatureDto create(FeatureDto dto) {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         if (repository.findByFeatureName(dto.getFeatureName()).isPresent())
             throw new AlreadyExistsException("Feature name already exists. Please use another name.");
         dto.setFeatureId(IdUtil.uuid());
         Feature feature = mapper.map(dto, Feature.class);
-        repository.save(feature);
-        FeatureDto created = mapper.map(feature, FeatureDto.class);
+        Feature saved = repository.save(feature);
+        FeatureDto created = mapper.map(saved, FeatureDto.class);
         created.setScenarios(Collections.emptyList());//feature can't be created with scenarios
         return created;
     }
 
-    //Not updating steps. only feature description can be updated
     @Override
     public FeatureDto update(FeatureDto dto) {
         Feature feature = repository.findByFeatureId(dto.getFeatureId())

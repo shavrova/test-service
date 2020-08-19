@@ -1,8 +1,6 @@
 package com.tms.api.model.feature;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,6 +8,9 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateFeatureRequest {
 
     @Size(min = 2, max = 100, message = "Feature name must be between 2 and 100 characters")

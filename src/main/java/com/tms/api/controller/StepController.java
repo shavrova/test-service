@@ -3,7 +3,9 @@ package com.tms.api.controller;
 import com.tms.api.data.dto.StepDto;
 import com.tms.api.model.step.CreateStepRequest;
 import com.tms.api.model.step.StepResponse;
+import com.tms.api.model.step.UpdateStepRequest;
 import com.tms.api.service.StepService;
+import com.tms.api.util.Path;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +20,7 @@ import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/steps")
+@RequestMapping(Path.STEPS)
 public class StepController {
 
     @Autowired
@@ -31,6 +33,14 @@ public class StepController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StepResponse> createStep(@Valid @RequestBody CreateStepRequest created) {
         StepDto dto = service.create(mapper.map(created, StepDto.class));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(dto, StepResponse.class));
+    }
+
+    @PutMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<StepResponse> updateStep(@Valid @RequestBody UpdateStepRequest updated) {
+        StepDto dto = service.update(mapper.map(updated, StepDto.class));
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.map(dto, StepResponse.class));
     }
 
